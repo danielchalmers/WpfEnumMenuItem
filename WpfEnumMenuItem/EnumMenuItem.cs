@@ -15,7 +15,7 @@ namespace WpfEnumMenuItem
                 nameof(Binding),
                 typeof(Enum),
                 typeof(EnumMenuItem),
-                new PropertyMetadata(EnumChanged)
+                new FrameworkPropertyMetadata(default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, BindingChanged)
             );
 
         public EnumMenuItem()
@@ -25,7 +25,7 @@ namespace WpfEnumMenuItem
             ItemContainerStyle = new Style
             {
                 TargetType = typeof(MenuItem),
-                BasedOn = (Style)FindResource(typeof(MenuItem)),
+                BasedOn = FindResource(typeof(MenuItem)) as Style,
                 Setters =
                 {
                     new Setter(HeaderProperty, new Binding(nameof(EnumMenuItemChoiceWrapper.DisplayName))),
@@ -43,23 +43,27 @@ namespace WpfEnumMenuItem
 
         protected ObservableCollection<EnumMenuItemChoiceWrapper> Choices { get; } = new();
 
-        private static void EnumChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        private static void BindingChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue is not Enum)
-                throw new InvalidOperationException($"Can't bind to a non-enum type in an {nameof(EnumMenuItem)}.");
+                throw new InvalidOperationException("Can't bind to a non-enum type.");
             if (o is not EnumMenuItem menuItem)
                 throw new InvalidOperationException($"Dependency object must be a {nameof(EnumMenuItem)}.");
 
             var isSameType = e.OldValue?.GetType() == e.NewValue?.GetType();
-
-            if (isSameType) // Update checkboxes to reflect changed binding.
+            if (isSameType)
             {
+                // Update checkboxes to reflect changed binding.
+                
                 foreach (var choice in menuItem.Choices)
                     choice.UpdateIsChecked();
             }
-            else // Populate choices for new enum.
+            else
             {
+                // Populate choices for new enum.
+
                 menuItem.Choices.Clear();
+
                 foreach (var value in Enum.GetValues(menuItem.Binding.GetType()))
                     menuItem.Choices.Add(new(menuItem, (Enum)value));
             }
@@ -72,7 +76,7 @@ namespace WpfEnumMenuItem
                 EnumMenuItem = enumMenuItem;
                 Enum = @enum;
                 Name = @enum.ToString();
-                DisplayName = GetAttribute<DescriptionAttribute>(@enum)?.Description ?? Name;
+                DisplayName = GetAttributeOrDefault<DescriptionAttribute>(@enum)?.Description ?? Name;
             }
 
             public event PropertyChangedEventHandler PropertyChanged;
@@ -87,19 +91,16 @@ namespace WpfEnumMenuItem
                 get => EnumMenuItem.Binding.Equals(Enum);
                 set
                 {
-                    if (value == true)
+                    if (value)
                         EnumMenuItem.Binding = Enum;
                 }
             }
 
             internal void UpdateIsChecked() =>
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsChecked)));
+                PropertyChanged?.Invoke(this, new(nameof(IsChecked)));
 
-            private static T GetAttribute<T>(Enum enumValue) where T : Attribute
-            {
-                var memberInfo = enumValue.GetType().GetMember(enumValue.ToString()).FirstOrDefault();
-                return (T)memberInfo?.GetCustomAttributes(typeof(T), false).FirstOrDefault();
-            }
+            private static T GetAttributeOrDefault<T>(Enum @enum) where T : Attribute =>
+                @enum?.GetType()?.GetMember(@enum.ToString())?.FirstOrDefault()?.GetCustomAttributes(typeof(T), false)?.FirstOrDefault() as T;
         }
     }
 }

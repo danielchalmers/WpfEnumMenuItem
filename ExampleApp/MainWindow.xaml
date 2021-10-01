@@ -1,0 +1,21 @@
+﻿<Window x:Class="ExampleApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:ExampleApp"
+		xmlns:emi="clr-namespace:WpfEnumMenuItem;assembly=WpfEnumMenuItem"
+		mc:Ignorable="d"
+        Title="MainWindow" Height="300" Width="300">
+	<Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MainWindow}}">
+		<Menu>
+			<emi:EnumMenuItem Header="EnumMenuItem bound to MyEnum" Binding="{Binding MyEnum}" />
+		</Menu>
+
+		<StackPanel Orientation="Horizontal"
+					HorizontalAlignment="Center" VerticalAlignment="Center">
+			<TextBlock Text="MyEnum: " />
+			<TextBlock Text="{Binding MyEnum}" />
+		</StackPanel>
+	</Grid>
+</Window>

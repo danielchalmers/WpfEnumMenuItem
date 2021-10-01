@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfEnumMenuItem", "WpfEnumMenuItem\WpfEnumMenuItem.csproj", "{19FAC913-8D3F-40D2-A9FC-3588F805CA3E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleApp", "ExampleApp\ExampleApp.csproj", "{305D0967-2FB8-4C77-AA5F-AA335BAE1A0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{19FAC913-8D3F-40D2-A9FC-3588F805CA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19FAC913-8D3F-40D2-A9FC-3588F805CA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19FAC913-8D3F-40D2-A9FC-3588F805CA3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{305D0967-2FB8-4C77-AA5F-AA335BAE1A0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{305D0967-2FB8-4C77-AA5F-AA335BAE1A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{305D0967-2FB8-4C77-AA5F-AA335BAE1A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{305D0967-2FB8-4C77-AA5F-AA335BAE1A0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
