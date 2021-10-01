@@ -22,8 +22,10 @@ jobs:
       
     - uses: actions/upload-artifact@v2
       with:
-          path: WpfEnumMenuItem/bin/Release
+          name: WpfEnumMenuItem
+          path: WpfEnumMenuItem/bin/Release/
       
     - uses: actions/upload-artifact@v2
       with:
-          path: ExampleApp/bin/Release
+          name: ExampleApp
+          path: ExampleApp/bin/Release/
