@@ -1,9 +1,13 @@
 # WpfEnumMenuItem
 A drop-in replacement for MenuItem that binds to an enum
 
+[![NuGet](https://img.shields.io/nuget/v/WpfEnumMenuItem.svg)](https://www.nuget.org/packages/WpfEnumMenuItem)
+
 ```csharp
 // Declare the enum.
-public enum MyEnum { Item1, Item2, [Description("Item with a description")] ItemWithDescription, LastItem, }
+public enum MyEnum {
+    Item1, Item2, [Description("Item with a description")] ItemWithDescription, LastItem
+}
 
 // The property we'll bind to.
 public MyEnum MyEnum { get; set; } // TODO: Notify PropertyChanged.
