@@ -23,7 +23,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
           name: nupkg
-          path: bin/Release/WpfEnumMenuItem.*.nupkg
+          path: bin/Release/*.nupkg
       
     - uses: actions/upload-artifact@v2
       with:
