@@ -1,0 +1,36 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+
+      - name: Build
+        run: |
+          dotnet --info
+          dotnet build -c Release
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - id: publish_nuget
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: WpfEnumMenuItem/WpfEnumMenuItem.csproj
+          VERSION_FILE_PATH: Directory.Build.props
+          NUGET_KEY: ${{secrets.NUGET_TOKEN}}
+          
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: "v${{ steps.publish_nuget.VERSION }}"
+          artifacts: ${{ steps.publish_nuget.PACKAGE_PATH }}
+          token: ${{ secrets.ACCESS_TOKEN }}
