@@ -1,4 +1,4 @@
-name: Publish new versions
+name: Publish new version
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
 
       - name: "Create GitHub Release"
         uses: softprops/action-gh-release@v1
-        if: ${{ steps.publish_nuget.PACKAGE_PATH != '' }} # Was a NuGet package created?
+        if: ${{ steps.publish_nuget.PACKAGE_PATH != null }} # Was a NuGet package created?
         with:
           tag_name: "v${{ steps.publish_nuget.VERSION }}"
           files: ${{ steps.publish_nuget.PACKAGE_PATH }}
