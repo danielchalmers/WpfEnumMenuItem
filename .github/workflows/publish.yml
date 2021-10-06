@@ -22,5 +22,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: ${{ steps.publish_nuget.outputs.PACKAGE_PATH != null }} # Was a NuGet package created?
         with:
-          tag_name: "v${{ steps.publish_nuget.outputs.VERSION }}"
+          tag_name: ${{ steps.publish_nuget.outputs.VERSION }}
           files: ${{ steps.publish_nuget.outputs.PACKAGE_PATH }}
