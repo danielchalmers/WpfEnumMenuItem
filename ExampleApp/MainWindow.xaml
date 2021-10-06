@@ -9,7 +9,7 @@
         Title="MainWindow" Height="300" Width="300">
 	<Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MainWindow}}">
 		<Menu>
-			<emi:EnumMenuItem Header="EnumMenuItem bound to MyEnum" Binding="{Binding MyEnum}" />
+			<emi:EnumMenuItem Header="MyEnum" Binding="{Binding MyEnum}" />
 		</Menu>
 
 		<StackPanel Orientation="Horizontal"

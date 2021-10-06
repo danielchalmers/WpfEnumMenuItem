@@ -1,22 +1,29 @@
 # WpfEnumMenuItem
-A drop-in replacement for MenuItem that binds to an enum
+
+A drop-in replacement for MenuItem that binds to an enum.
 
 [![NuGet](https://img.shields.io/nuget/v/WpfEnumMenuItem.svg)](https://www.nuget.org/packages/WpfEnumMenuItem)
 
 ```csharp
 // Declare the enum.
 public enum MyEnum {
-    Item1, Item2, [Description("Item with a description")] ItemWithDescription, LastItem
+    One,
+    Two,
+    [Description("Third item!")]
+    Three,
+    Four,
 }
 
 // The property we'll bind to.
-public MyEnum MyEnum { get; set; } // TODO: Notify PropertyChanged.
+public MyEnum MyEnum { get; set; }
 ```
 
 ```xaml
 <Menu DataContext="...">
-    <emi:EnumMenuItem Header="EnumMenuItem bound to MyEnum" Binding="{Binding MyEnum}" />
+    <emi:EnumMenuItem
+        Header="MyEnum"
+        Binding="{Binding MyEnum}" />
 </Menu>
 ```
 
-![image](https://user-images.githubusercontent.com/7112040/135589479-de11ff73-f85e-4cbc-bb63-38ef78be4a28.png)
+![Screenshot](https://user-images.githubusercontent.com/7112040/136148767-0bdba060-55f7-4653-8d75-ff9ddbde7c01.png)

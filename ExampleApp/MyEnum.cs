@@ -4,13 +4,13 @@ namespace ExampleApp
 {
     public enum MyEnum
     {
-        Item1,
+        One,
         
-        Item2,
+        Two,
 
-        [Description("Item with a description")]
-        ItemWithDescription,
+        [Description("Third item!")]
+        Three,
 
-        LastItem,
+        Four,
     }
 }
