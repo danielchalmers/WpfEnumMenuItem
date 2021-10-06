@@ -20,7 +20,7 @@ jobs:
 
       - name: "Create GitHub Release"
         uses: softprops/action-gh-release@v1
-        if: ${{ steps.publish_nuget.PACKAGE_PATH != null }} # Was a NuGet package created?
+        if: ${{ steps.publish_nuget.outputs.PACKAGE_PATH != null }} # Was a NuGet package created?
         with:
-          tag_name: "v${{ steps.publish_nuget.VERSION }}"
-          files: ${{ steps.publish_nuget.PACKAGE_PATH }}
+          tag_name: "v${{ steps.publish_nuget.outputs.VERSION }}"
+          files: ${{ steps.publish_nuget.outputs.PACKAGE_PATH }}
