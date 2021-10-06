@@ -13,24 +13,27 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
 
-      - name: Build
+      - name: "Build"
         run: |
           dotnet --info
           dotnet build -c Release
+
   release:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      
-      - id: publish_nuget
+
+      - name: "Publish NuGet Package"
+        id: publish_nuget
         uses: rohith/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: WpfEnumMenuItem/WpfEnumMenuItem.csproj
           VERSION_FILE_PATH: Directory.Build.props
           NUGET_KEY: ${{secrets.NUGET_TOKEN}}
-          
-      - uses: ncipollo/release-action@v1
+
+      - name: "Create GitHub Release"
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/v')
         with:
-          tag: "v${{ steps.publish_nuget.VERSION }}"
-          artifacts: ${{ steps.publish_nuget.PACKAGE_PATH }}
+          files: ${{ steps.publish_nuget.PACKAGE_PATH }}
           token: ${{ secrets.ACCESS_TOKEN }}
