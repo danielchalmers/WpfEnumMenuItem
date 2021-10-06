@@ -9,7 +9,7 @@
     <Description>A drop-in replacement for MenuItem that binds to an enum</Description>
     <Authors>Daniel Chalmers</Authors>
     <Copyright>© Daniel Chalmers 2021</Copyright>
-    <Version>0.1.5</Version>
+    <Version>0.2.0</Version>
     <RepositoryUrl>https://github.com/danielchalmers/WpfEnumMenuItem</RepositoryUrl>
   </PropertyGroup>
 </Project>
