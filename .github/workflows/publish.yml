@@ -1,0 +1,26 @@
+name: Publish new versions
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: "Publish NuGet Package"
+        id: publish_nuget
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: WpfEnumMenuItem/WpfEnumMenuItem.csproj
+          VERSION_FILE_PATH: Directory.Build.props
+          NUGET_KEY: ${{secrets.NUGET_TOKEN}}
+
+      - name: "Create GitHub Release"
+        uses: softprops/action-gh-release@v1
+        if: ${{ steps.publish_nuget.PACKAGE_PATH != '' }} # Was a NuGet package created?
+        with:
+          tag_name: "v${{ steps.publish_nuget.VERSION }}"
+          files: ${{ steps.publish_nuget.PACKAGE_PATH }}
