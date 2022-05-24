@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel;
 
-namespace ExampleApp
+namespace ExampleApp;
+
+public enum MyEnum
 {
-    public enum MyEnum
-    {
-        One,
-        
-        Two,
+    One,
 
-        [Description("Third item!")]
-        Three,
+    Two,
 
-        Four,
-    }
+    [Description("Third item!")]
+    Three,
+
+    Four,
 }

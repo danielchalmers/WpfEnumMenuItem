@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>WpfEnumMenuItem</PackageId>
     <PackageTags>WPF Enum MenuItem</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
