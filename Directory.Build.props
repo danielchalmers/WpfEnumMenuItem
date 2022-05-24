@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <TargetFrameworks>net45;net5.0-windows</TargetFrameworks>
+    <TargetFrameworks>net462;net5.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <LangVersion>9</LangVersion>
   </PropertyGroup>
