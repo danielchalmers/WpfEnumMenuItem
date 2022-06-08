@@ -20,7 +20,7 @@ public class EnumMenuItem : MenuItem
 
     public EnumMenuItem()
     {
-        ItemsSource = Choices;
+        ItemsSource = WrappedItems;
 
         ItemContainerStyle = new()
         {
@@ -28,9 +28,9 @@ public class EnumMenuItem : MenuItem
             BasedOn = FindResource(typeof(MenuItem)) as Style,
             Setters =
             {
-                new Setter(HeaderProperty, new Binding(nameof(EnumMenuItemChoiceWrapper.DisplayName))),
+                new Setter(HeaderProperty, new Binding(nameof(EnumMenuItemWrapper.DisplayName))),
                 new Setter(IsCheckableProperty, true),
-                new Setter(IsCheckedProperty, new Binding(nameof(EnumMenuItemChoiceWrapper.IsChecked))),
+                new Setter(IsCheckedProperty, new Binding(nameof(EnumMenuItemWrapper.IsChecked))),
             }
         };
     }
@@ -41,62 +41,63 @@ public class EnumMenuItem : MenuItem
         set => SetValue(BindingProperty, value);
     }
 
-    protected ObservableCollection<EnumMenuItemChoiceWrapper> Choices { get; } = new();
+    protected ObservableCollection<EnumMenuItemWrapper> WrappedItems { get; } = new();
 
     private static void BindingChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
     {
-        if (e.NewValue is not Enum)
-            throw new InvalidOperationException("Tried to bind to a non-enum type.");
         if (o is not EnumMenuItem menuItem)
-            throw new InvalidOperationException($"Dependency object type must be {nameof(EnumMenuItem)}.");
+            throw new InvalidOperationException($"Dependency object must be of type {nameof(EnumMenuItem)}.");
+        if (e.NewValue is not Enum @enum)
+            throw new InvalidOperationException("Tried to bind to a non-enum type.");
 
-        var isSameType = e.OldValue?.GetType() == e.NewValue?.GetType();
+        var isSameType = e.OldValue?.GetType() == @enum.GetType();
         if (isSameType)
         {
-            // Update checkboxes to reflect changed binding.
-            foreach (var choice in menuItem.Choices)
+            // Update checked status for all items.
+            foreach (var choice in menuItem.WrappedItems)
                 choice.UpdateIsChecked();
         }
         else
         {
-            // Repopulate choices for new enum.
-            menuItem.Choices.Clear();
+            // Populate for new type.
+            menuItem.WrappedItems.Clear();
             foreach (var value in Enum.GetValues(menuItem.Binding.GetType()))
-                menuItem.Choices.Add(new(menuItem, (Enum)value));
+                menuItem.WrappedItems.Add(new(menuItem, (Enum)value));
         }
     }
 
-    protected class EnumMenuItemChoiceWrapper : INotifyPropertyChanged
+    protected class EnumMenuItemWrapper : INotifyPropertyChanged
     {
-        public EnumMenuItemChoiceWrapper(EnumMenuItem enumMenuItem, Enum @enum)
+        private readonly EnumMenuItem _parent;
+
+        public EnumMenuItemWrapper(EnumMenuItem parent, Enum @enum)
         {
-            EnumMenuItem = enumMenuItem;
-            Enum = @enum;
+            _parent = parent ?? throw new ArgumentNullException(nameof(parent));
+            Enum = @enum ?? throw new ArgumentNullException(nameof(@enum));
             Name = @enum.ToString();
             DisplayName = GetAttributeOrDefault<DescriptionAttribute>(@enum)?.Description ?? Name;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private EnumMenuItem EnumMenuItem { get; }
         public Enum Enum { get; }
         public string Name { get; }
         public string DisplayName { get; }
 
         public bool IsChecked
         {
-            get => EnumMenuItem.Binding.Equals(Enum);
+            get => _parent.Binding.Equals(Enum);
             set
             {
                 if (value)
-                    EnumMenuItem.Binding = Enum;
+                    _parent.Binding = Enum;
             }
         }
 
         internal void UpdateIsChecked() =>
             PropertyChanged?.Invoke(this, new(nameof(IsChecked)));
 
-        private static TAttribute GetAttributeOrDefault<TAttribute>(Enum @enum) where TAttribute : Attribute =>
-            @enum?.GetType()?.GetMember(@enum.ToString())?.FirstOrDefault()?.GetCustomAttributes(typeof(TAttribute), false)?.FirstOrDefault() as TAttribute;
+        private static T GetAttributeOrDefault<T>(Enum @enum) where T : Attribute =>
+            @enum.GetType().GetMember(@enum.ToString())?.FirstOrDefault()?.GetCustomAttributes(typeof(T), false)?.FirstOrDefault() as T;
     }
 }
