@@ -28,7 +28,7 @@ public class EnumMenuItem : MenuItem
             BasedOn = FindResource(typeof(MenuItem)) as Style,
             Setters =
             {
-                new Setter(HeaderProperty, new Binding(nameof(EnumMenuItemWrapper.DisplayName))),
+                new Setter(HeaderProperty, new Binding(nameof(EnumMenuItemWrapper.Header))),
                 new Setter(IsCheckableProperty, true),
                 new Setter(IsCheckedProperty, new Binding(nameof(EnumMenuItemWrapper.IsChecked))),
             }
@@ -74,15 +74,13 @@ public class EnumMenuItem : MenuItem
         {
             _parent = parent ?? throw new ArgumentNullException(nameof(parent));
             Enum = @enum ?? throw new ArgumentNullException(nameof(@enum));
-            Name = @enum.ToString();
-            DisplayName = GetAttributeOrDefault<DescriptionAttribute>(@enum)?.Description ?? Name;
+            Header = GetAttributeOrDefault<DescriptionAttribute>(@enum)?.Description ?? @enum.ToString();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Enum Enum { get; }
-        public string Name { get; }
-        public string DisplayName { get; }
+        public string Header { get; }
 
         public bool IsChecked
         {
